@@ -1,0 +1,86 @@
+from random import *
+gogogadgetalapioche = {
+	'rouge' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'bleu' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'vert' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'jaune' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'special' : ['changement de couleur', '+4']
+}
+def gogogadgetalapiocheremplie():
+    global gogogadgetatonindexrouge,gogogadgetatonindexbleu,gogogadgetatonindexvert,gogogadgetatonindexjaune,gogogadgetatonindexspecial,gogogadgetacequilyaaumilieu
+    gogogadgetatonindexrouge = [0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12]
+    gogogadgetatonindexbleu = list(gogogadgetatonindexrouge)
+    gogogadgetatonindexvert = list(gogogadgetatonindexrouge)
+    gogogadgetatonindexjaune = list(gogogadgetatonindexrouge)
+    gogogadgetatonindexspecial = [0,0,0,0,1,1,1,1]
+    gogogadgetacequilyaaumilieu = []
+    
+
+def gogogadgetalacarte():
+    gogogadgetatacouleur = randint(1,5)
+    if gogogadgetatacouleur==1 :
+        gogogadgetatacouleur = 'rouge'
+        gogogadgetatonindex = randint(0,len(gogogadgetatonindexrouge)-1)
+        gogogadgetatonindex = gogogadgetatonindexrouge[gogogadgetatonindex]
+        gogogadgetatonindexrouge.pop(gogogadgetatonindex)
+    elif gogogadgetatacouleur==2 :
+        gogogadgetatacouleur = 'bleu'
+        gogogadgetatonindex = randint(0,len(gogogadgetatonindexbleu)-1)
+        gogogadgetatonindex = gogogadgetatonindexbleu[gogogadgetatonindex]
+        gogogadgetatonindexbleu.pop(gogogadgetatonindex)
+    elif gogogadgetatacouleur==3 :
+        gogogadgetatacouleur = 'vert'
+        gogogadgetatonindex = randint(0,len(gogogadgetatonindexvert)-1)
+        gogogadgetatonindex = gogogadgetatonindexvert[gogogadgetatonindex]
+        gogogadgetatonindexvert.pop(gogogadgetatonindex)
+    elif gogogadgetatacouleur==4 :
+        gogogadgetatacouleur = 'jaune'
+        gogogadgetatonindex = randint(0,len(gogogadgetatonindexjaune)-1)
+        gogogadgetatonindex = gogogadgetatonindexjaune[gogogadgetatonindex]
+        gogogadgetatonindexjaune.pop(gogogadgetatonindex)
+    elif gogogadgetatacouleur==5 :
+        gogogadgetatacouleur = 'special'
+        gogogadgetatonindex = randint(0,len(gogogadgetatonindexspecial)-1)
+        gogogadgetatonindex = gogogadgetatonindexspecial[gogogadgetatonindex]
+        gogogadgetatonindexspecial.pop(gogogadgetatonindex)
+        return gogogadgetalapioche[gogogadgetatacouleur][gogogadgetatonindex]
+    return gogogadgetalapioche[gogogadgetatacouleur][gogogadgetatonindex]+ " " + gogogadgetatacouleur
+
+def gogogadgetauchangementdecouleur():
+    gogogadgetalacouleurquetuveux = input("Quelle couleur veux-tu ?")
+    while gogogadgetalacouleurquetuveux!="rouge" or gogogadgetalacouleurquetuveux!="bleu" or gogogadgetalacouleurquetuveux!="jaune" or gogogadgetalacouleurquetuveux!="vert":
+        gogogadgetalacouleurquetuveux = input("Quelle couleur veux-tu ?")    
+    gogogadgetacequilyaaumilieu.append(gogogadgetalacouleurquetuveux)
+    
+    
+    
+    
+
+def gogogadgetatamain(gogogadgetacequetuasdanslamain):
+    gogogadgetalacartefinale = gogogadgetalacarte()
+    gogogadgetacequetuasdanslamain.append(gogogadgetalacartefinale)
+    print(gogogadgetacequetuasdanslamain)
+
+
+def gogogadgetautestdepose(a,b):
+    a = a.split(" ")
+    b = b.split(" ")
+    if a[0] == b[0] or a[-1] == b[-1] or a[0] == "+4" or a[-1] == "couleur" :
+        return True
+    else :
+        return False
+
+gogogadgetalapiocheremplie()
+gogogadgetacequetuasdanslamain = []
+gogogadgetatamain(gogogadgetacequetuasdanslamain)
+
+gogogadgetalacartefinale = gogogadgetalacarte()
+gogogadgetacequilyaaumilieu.append(gogogadgetalacartefinale)
+print(gogogadgetacequilyaaumilieu)
+
+gogogadgetacequetuveuxposer = input("Gogogogadgetacequetuveuxjouer :")
+while not (gogogadgetacequetuveuxposer in gogogadgetacequetuasdanslamain) and gogogadgetautestdepose(gogogadgetacequetuveuxposer,gogogadgetacequilyaaumilieu[-1]):
+    gogogadgetacequetuveuxposer = input("Gogogogadgetacequetuveuxjouer :")
+    
+gogogadgetacequetuasdanslamain.remove(gogogadgetacequetuveuxposer)
+gogogadgetacequilyaaumilieu.append(gogogadgetacequetuveuxposer)
