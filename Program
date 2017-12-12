@@ -1,86 +1,408 @@
+from tkinter import*
+from tkinter.messagebox import*
 from random import *
+from winsound import *
+
+global entree,fenetre,label
+global joueurs,gogogadgetauxjoueurs,gogogadgetauxnombresdecartesquetudoispiocher,relancer
+PlaySound("Main-Theme.wav", SND_FILENAME | SND_ASYNC | SND_LOOP)
+def timeout():
+    PlaySound(None,SND_PURGE)
+
 gogogadgetalapioche = {
-	'rouge' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
-	'bleu' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
-	'vert' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
-	'jaune' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
-	'special' : ['changement de couleur', '+4']
+	'Rouge' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'Bleu' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'Vert' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'Jaune' : ['0','1','2','3','4','5','6','7','8','9','passe ton tour', 'changement de sens', '+2'],
+	'Special' : ['changement de couleur', '+4']
 }
 def gogogadgetalapiocheremplie():
+    """remplit la pioche"""
     global gogogadgetatonindexrouge,gogogadgetatonindexbleu,gogogadgetatonindexvert,gogogadgetatonindexjaune,gogogadgetatonindexspecial,gogogadgetacequilyaaumilieu
     gogogadgetatonindexrouge = [0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12]
     gogogadgetatonindexbleu = list(gogogadgetatonindexrouge)
     gogogadgetatonindexvert = list(gogogadgetatonindexrouge)
     gogogadgetatonindexjaune = list(gogogadgetatonindexrouge)
     gogogadgetatonindexspecial = [0,0,0,0,1,1,1,1]
-    gogogadgetacequilyaaumilieu = []
+    gogogadgetacequilyaaumilieu = ["0"]
     
-
 def gogogadgetalacarte():
-    gogogadgetatacouleur = randint(1,5)
-    if gogogadgetatacouleur==1 :
-        gogogadgetatacouleur = 'rouge'
-        gogogadgetatonindex = randint(0,len(gogogadgetatonindexrouge)-1)
-        gogogadgetatonindex = gogogadgetatonindexrouge[gogogadgetatonindex]
-        gogogadgetatonindexrouge.pop(gogogadgetatonindex)
-    elif gogogadgetatacouleur==2 :
-        gogogadgetatacouleur = 'bleu'
-        gogogadgetatonindex = randint(0,len(gogogadgetatonindexbleu)-1)
-        gogogadgetatonindex = gogogadgetatonindexbleu[gogogadgetatonindex]
-        gogogadgetatonindexbleu.pop(gogogadgetatonindex)
-    elif gogogadgetatacouleur==3 :
-        gogogadgetatacouleur = 'vert'
-        gogogadgetatonindex = randint(0,len(gogogadgetatonindexvert)-1)
-        gogogadgetatonindex = gogogadgetatonindexvert[gogogadgetatonindex]
-        gogogadgetatonindexvert.pop(gogogadgetatonindex)
-    elif gogogadgetatacouleur==4 :
-        gogogadgetatacouleur = 'jaune'
-        gogogadgetatonindex = randint(0,len(gogogadgetatonindexjaune)-1)
-        gogogadgetatonindex = gogogadgetatonindexjaune[gogogadgetatonindex]
-        gogogadgetatonindexjaune.pop(gogogadgetatonindex)
-    elif gogogadgetatacouleur==5 :
-        gogogadgetatacouleur = 'special'
-        gogogadgetatonindex = randint(0,len(gogogadgetatonindexspecial)-1)
-        gogogadgetatonindex = gogogadgetatonindexspecial[gogogadgetatonindex]
-        gogogadgetatonindexspecial.pop(gogogadgetatonindex)
-        return gogogadgetalapioche[gogogadgetatacouleur][gogogadgetatonindex]
+    """génère une carte"""
+    global gogogadgetatonindex,gogogadgetalanouvellecarte
+    gogogadgetatacouleur = randint(1,108)
+    if gogogadgetatacouleur<=25 and gogogadgetatonindexrouge!=[]:
+    	gogogadgetatacouleur = 'Rouge'
+    	gogogadgetatonindex = randint(0,len(gogogadgetatonindexrouge)-1)
+    	gogogadgetatonindex = gogogadgetatonindexrouge.pop(gogogadgetatonindex)
+    elif 26<=gogogadgetatacouleur<=50 and gogogadgetatonindexbleu!=[]:
+    	gogogadgetatacouleur = 'Bleu'
+    	gogogadgetatonindex = randint(0,len(gogogadgetatonindexbleu)-1)
+    	gogogadgetatonindex = gogogadgetatonindexbleu.pop(gogogadgetatonindex)
+    elif 51<=gogogadgetatacouleur<=75 and gogogadgetatonindexvert!=0:
+    	gogogadgetatacouleur = 'Vert'
+    	gogogadgetatonindex = randint(0,len(gogogadgetatonindexvert)-1)
+    	gogogadgetatonindex = gogogadgetatonindexvert.pop(gogogadgetatonindex)
+    elif 76<=gogogadgetatacouleur<=100 and gogogadgetatonindexjaune!=[]:
+    	gogogadgetatacouleur = 'Jaune'
+    	gogogadgetatonindex = randint(0,len(gogogadgetatonindexjaune)-1)
+    	gogogadgetatonindex = gogogadgetatonindexjaune.pop(gogogadgetatonindex)
+    elif 100<gogogadgetatacouleur and gogogadgetatonindexspecial!=[]:
+    	gogogadgetatacouleur = 'Special'
+    	gogogadgetatonindex = randint(0,len(gogogadgetatonindexspecial)-1)
+    	gogogadgetatonindex = gogogadgetatonindexspecial.pop(gogogadgetatonindex)
+    	return gogogadgetalapioche[gogogadgetatacouleur][gogogadgetatonindex]
+    else:
+    	gogogadgetalanouvellecarte=gogogadgetalacarte()
+    	return gogogadgetalanouvellecarte
     return gogogadgetalapioche[gogogadgetatacouleur][gogogadgetatonindex]+ " " + gogogadgetatacouleur
 
 def gogogadgetauchangementdecouleur():
-    gogogadgetalacouleurquetuveux = input("Quelle couleur veux-tu ?")
-    while gogogadgetalacouleurquetuveux!="rouge" or gogogadgetalacouleurquetuveux!="bleu" or gogogadgetalacouleurquetuveux!="jaune" or gogogadgetalacouleurquetuveux!="vert":
-        gogogadgetalacouleurquetuveux = input("Quelle couleur veux-tu ?")    
-    gogogadgetacequilyaaumilieu.append(gogogadgetalacouleurquetuveux)
-    
-    
-    
-    
+    """demande la couleur souhaitée"""
+    global liste
+    liste = Listbox(fenetre) 
+    liste.insert(1, "Rouge")
+    liste.insert(2, "Bleu")
+    liste.insert(3, "Vert")
+    liste.insert(4, "Jaune")
+    liste.pack()
+    liste.focus_set()
+    liste.bind('<ButtonRelease>',gogogadgetauchangement2couleur)
 
+def gogogadgetauchangement2couleur(a):
+    """change la couleur"""
+    e=liste.get(liste.curselection())
+    liste.destroy()
+    gogogadgetacequilyaaumilieu.append(e)
+    switch()
+
+def call():
+    """pioche une carte"""
+    gogogadgetatamain(gogogadgetauxjoueurs[joueurs[0]])
+    switch()
+    
 def gogogadgetatamain(gogogadgetacequetuasdanslamain):
+    """pioche une carte"""
+    global jouee
+    jouee=False
     gogogadgetalacartefinale = gogogadgetalacarte()
     gogogadgetacequetuasdanslamain.append(gogogadgetalacartefinale)
-    print(gogogadgetacequetuasdanslamain)
 
-
-def gogogadgetautestdepose(a,b):
+def gogogadgetautestdepose(a,b,n):
+    """vérifie si la carte peut être posée"""
     a = a.split(" ")
     b = b.split(" ")
-    if a[0] == b[0] or a[-1] == b[-1] or a[0] == "+4" or a[-1] == "couleur" :
-        return True
-    else :
-        return False
+    if (n!=0 and a[0]==b[0]=="+2") or (n!=0 and a[0]==b[0]=="+4"):
+    	return True
+    elif n==0:
+    	return (a[0] == b[0] or a[-1] == b[-1] or a[0] == "+4" or a[-1] == "couleur")
+    else:
+    	return False
 
-gogogadgetalapiocheremplie()
-gogogadgetacequetuasdanslamain = []
-gogogadgetatamain(gogogadgetacequetuasdanslamain)
+def gogogadgetatupassestontour(a):
+    """passe le tour du joueur suivant"""
+    global jouee
+    a=a.split()
+    if (a[0]=="+4" or a[0]=="passe" or a[0]=="+2") and jouee and gogogadgetauxnombresdecartesquetudoispiocher==0:
+        gogogadgetauntrucaupif=[i for i in gogogadgetauxboutons[joueurs[0]]]
+        for i in gogogadgetauntrucaupif:
+            gogogadgetauxboutons[joueurs[0]][i][0].destroy()
+            del gogogadgetauxboutonscopie[i]
+            del gogogadgetauxboutons[joueurs[0]][i]
+        joueurs.append(joueurs.pop(0))
 
-gogogadgetalacartefinale = gogogadgetalacarte()
-gogogadgetacequilyaaumilieu.append(gogogadgetalacartefinale)
-print(gogogadgetacequilyaaumilieu)
+def gogogadgetauchangementdesens(a):
+    """change le sens de jeu"""
+    global jouee
+    a=a.split()
+    if len(a)>=2 and a[-2]=="sens"and jouee:
+        gogogadgetauntrucaupif=[i for i in gogogadgetauxboutons[joueurs[0]]]
+        for i in gogogadgetauntrucaupif:
+            gogogadgetauxboutons[joueurs[0]][i][0].destroy()
+            del gogogadgetauxboutonscopie[i]
+            del gogogadgetauxboutons[joueurs[0]][i]
+        joueurs.append(joueurs.pop(0))
+        if nb_joueurs!=2:
+            joueurs.reverse()
 
-gogogadgetacequetuveuxposer = input("Gogogogadgetacequetuveuxjouer :")
-while not (gogogadgetacequetuveuxposer in gogogadgetacequetuasdanslamain) and gogogadgetautestdepose(gogogadgetacequetuveuxposer,gogogadgetacequilyaaumilieu[-1]):
-    gogogadgetacequetuveuxposer = input("Gogogogadgetacequetuveuxjouer :")
+def gogogadgetabouffeca(a,joueur,n):
+    """détermine le nombre de carte à piocher et si le joueur
+    suivant doit piocher"""
+    a=a.split()
+    gogogadgetauneliste=[]
+    for i in gogogadgetauxjoueurs[joueur]:
+        gogogadgetauneliste.append(i.split())
+    if a[0]=="+2":
+        n+=2
+        for j in gogogadgetauneliste:
+            if j[0]=="+2":
+                return n
+    elif a[0]=="+4":
+        n+=4
+        for j in gogogadgetauneliste:
+            if j[0]=="+4":
+                return n
+    for i in range (n):
+        gogogadgetatamain(gogogadgetauxjoueurs[joueur])
+    n=0
+    return n
+
+def callback():
+    """demande si l utilisateur veut quitter la partie"""
+    if askyesno('Quitter ?', 'Êtes-vous sûr de vouloir quitter?'):
+    	showwarning('Quitter..', 'Tant pis... Au revoir')
+    	fenetre.destroy()
+    	timeout()
+    else:
+    	showerror('Jouer ?', 'OUI!')
+    	showinfo("Jouer !!", "Jouons à un jeu..")
+
+def voicidelaide():
+    """ouvre le fichier README.txt"""
+    fichier=open("README.txt")
+    contenu=fichier.read()
+    fenetre2=Tk(className="Aide")
+    Label(fenetre2,text=contenu).pack(side=LEFT)
     
-gogogadgetacequetuasdanslamain.remove(gogogadgetacequetuveuxposer)
-gogogadgetacequilyaaumilieu.append(gogogadgetacequetuveuxposer)
+def clavier(b):
+    """mémorise les noms des joueurs"""
+    global cpt,gogogadgetauxjoueurs,joueurs
+    if cpt <nb_joueurs:
+        gogogadgetauxjoueurs[entree[cpt].get()]=[]
+        label[cpt].destroy()
+        entree[cpt].destroy()
+        cpt+=1
+    if cpt ==nb_joueurs:
+        joueurs=list(gogogadgetauxjoueurs.keys())
+        lancer()
+
+def demande_nom():
+    """demande le nom des joueurs"""
+    global label,entree,a,cpt,nb_joueurs
+    cpt=0
+    nb_joueurs=scale.get()
+    label=[0 for i in range(nb_joueurs)]
+    entree=[0 for i in range(nb_joueurs)]
+    for i in range(nb_joueurs):
+        label[i]=Label(fenetre,text="gogogadgetatonnom : ")
+        label[i].pack()
+        value = StringVar() 
+        entree[i] = Entry(fenetre, textvariable=value, width=30)
+        entree[i].focus_set()
+        entree[i].bind("<Return>",clavier)
+        entree[i].pack()
+
+def relance():
+    """relance une partie"""
+    gogogadgetauntrucaupif=[i for i in gogogadgetauxboutons[joueurs[0]]]
+    for i in gogogadgetauntrucaupif:
+        gogogadgetauxboutons[joueurs[0]][i][0].destroy()
+        del gogogadgetauxboutonscopie[i]
+        del gogogadgetauxboutons[joueurs[0]][i]
+    for i in gogogadgetauxjoueurs:
+        gogogadgetauxjoueurs[i]=[]
+    lancer()
+
+def lancer():
+    """lance une partie"""
+    global fenetre,gogogadgetauxboutons,relancer,gogogadgetaunombredevictoires
+    fenetre.destroy()
+    fenetre=Tk(className="gogogadgetouno")
+    menubar = Menu(fenetre)
+
+    menu1 = Menu(menubar, tearoff=0)
+    menu1.add_command(label="Nouvelle partie", command=relance)
+    menu1.add_separator()
+    menu1.add_command(label="Quitter", command=callback)
+    menubar.add_cascade(label="Fichier", menu=menu1)
+
+    menu2 = Menu(menubar, tearoff=0)
+    menu2.add_command(label="A propos", command=voicidelaide)
+    menubar.add_cascade(label="Aide", menu=menu2)
+
+    fenetre.config(menu=menubar)
+    gogogadgetauxboutons={}
+    for j in joueurs:
+        for i in range (7):
+            gogogadgetatamain(gogogadgetauxjoueurs[j])
+        gogogadgetauxboutons[j]={}
+    gagne=False
+    gogogadgetauxnombresdecartesquetudoispiocher=0
+    if not(relancer):
+        gogogadgetaunombredevictoires={}
+        for  i in joueurs:
+            gogogadgetaunombredevictoires[i]=0
+        jeu()
+        
+
+def gogogadgetalaffichagedetamain(main,joueur):
+    """affiche la main du joueur"""
+    global cartes,desboutons,gogogadgetauxboutonscopie
+    c=0
+    cartes=[0 for i in range(len(main))]
+    desboutons=[0 for i in range(len(main))]
+    for i in main:
+        if i in gogogadgetauxboutons[joueur]:
+            if (i+" ") in gogogadgetauxboutons[joueur]:
+                cartes[c]=PhotoImage(file=i+'.png')
+                gogogadgetauxboutons[joueur][i+"  "]=[Frame(fenetre,height=200,width=200,background='blue')]#,command=gogogadgetalaposedecarte)
+                gogogadgetauxboutons[joueur][i+"  "][0].pack(side=LEFT)
+                desboutons[c]=Button(gogogadgetauxboutons[joueur][i+"  "][0],image=cartes[c],command=gogogadgetauxboutons[joueur][i+"  "].pop)
+                desboutons[c].focus_set()
+                desboutons[c].bind("<Leave>",gogogadgetalarecupdelacarte)
+                desboutons[c].pack()
+                c+=1
+            else:
+                cartes[c]=PhotoImage(file=i+'.png')
+                gogogadgetauxboutons[joueur][i+" "]=[Frame(fenetre,height=200,width=200,background='blue')]#,command=gogogadgetalaposedecarte)
+                gogogadgetauxboutons[joueur][i+" "][0].pack(side=LEFT)
+                desboutons[c]=Button(gogogadgetauxboutons[joueur][i+" "][0],image=cartes[c],command=gogogadgetauxboutons[joueur][i+" "].pop)
+                desboutons[c].focus_set()
+                desboutons[c].bind("<Leave>",gogogadgetalarecupdelacarte)
+                desboutons[c].pack()
+                c+=1
+        else :
+            cartes[c]=PhotoImage(file=i+'.png')
+            gogogadgetauxboutons[joueur][i]=[Frame(fenetre,height=200,width=200,background='blue')]#,command=gogogadgetalaposedecarte)
+            gogogadgetauxboutons[joueur][i][0].pack(side=LEFT)
+            desboutons[c]=Button(gogogadgetauxboutons[joueur][i][0],image=cartes[c],command=gogogadgetauxboutons[joueur][i].pop)
+            desboutons[c].focus_set()
+            desboutons[c].bind("<Leave>",gogogadgetalarecupdelacarte)
+            desboutons[c].pack()
+            c+=1
+    gogogadgetauxboutonscopie={}
+    for i in gogogadgetauxboutons[joueur]:
+        gogogadgetauxboutonscopie[i]=list(gogogadgetauxboutons[joueur][i])
+
+def gogogadgetalarecupdelacarte(a):
+    """récupère la carte correspondant au bouton"""
+    global gogogadgetauxboutons,gogogadgetauxboutonscopie,gogogadgetauxnombresdecartesquetudoispiocher,carteaupif,jouee
+    d=0
+    for i in gogogadgetauxboutonscopie:
+        if gogogadgetauxboutons[joueurs[0]][i]==[]:
+            b=gogogadgetautestdepose(i,gogogadgetacequilyaaumilieu[-1],0)
+            if not b:
+                gogogadgetauxboutons[joueurs[0]][i].append(gogogadgetauxboutonscopie[i][0])
+                showerror("Nope","Vous ne pouvez pas jouer cette carte !")
+            else:
+                d=i
+    if d!=0:
+        gogogadgetauxboutonscopie[d][0].destroy()
+        del gogogadgetauxboutonscopie[d]
+        del gogogadgetauxboutons[joueurs[0]][d]
+        carteaupif=""
+        f=d.split()
+        for i in range(len(f)-1):
+            carteaupif+=f[i]+" "
+        carteaupif+=f[-1]
+        gogogadgetacequilyaaumilieu.append(carteaupif)
+        gogogadgetauxjoueurs[joueurs[0]].remove(carteaupif)
+        gogogadgetauxnombresdecartesquetudoispiocher=gogogadgetabouffeca(gogogadgetacequilyaaumilieu[-1],joueurs[1],gogogadgetauxnombresdecartesquetudoispiocher)
+        jouee=True
+        if gogogadgetacequilyaaumilieu[-1]=="+4" or gogogadgetacequilyaaumilieu[-1]=="changement de couleur":
+            gogogadgetauchangementdecouleur()
+        else:
+            switch()
+        
+def switch():
+    """change le tour de jeu"""
+    global gogogadgetauxboutons,gogogadgetauxboutonscopie,relancer,gogogadgetaunombredevictoires
+    unbouton.destroy()
+    lable.destroy()
+    mute.destroy()
+    pioche.destroy()
+    if len(gogogadgetauxjoueurs[joueurs[0]])==1:
+        showinfo("Presque!","UNO!!!!")
+    if len(gogogadgetauxjoueurs[joueurs[0]])==0:
+        PlaySound('victory theme.wav', SND_FILENAME | SND_ASYNC)
+        showinfo("Victoire", "Félicitations "+joueurs[0]+" vous avez gagné")
+        gogogadgetaunombredevictoires[joueurs[0]]+=1
+        if askyesno("Rejouer?","Voulez-vous rejouer?"):
+            showinfo("Allez!","C'est reparti!")
+            PlaySound("Main-Theme.wav", SND_FILENAME | SND_ASYNC | SND_LOOP)
+            for i in gogogadgetauxjoueurs:
+                gogogadgetauxjoueurs[i]=[]
+            relancer=True
+            lancer()
+        else:
+            showinfo("Quitter","Au revoir...")
+            fenetre.destroy()
+            for i in gogogadgetaunombredevictoires:
+                print(i," a gagné ",gogogadgetaunombredevictoires[i]," fois")
+    elif gogogadgetacequilyaaumilieu[-2]=='+4':
+        gogogadgetatupassestontour(gogogadgetacequilyaaumilieu[-2])
+        gogogadgetauchangementdesens(gogogadgetacequilyaaumilieu[-2])
+    else:
+        gogogadgetatupassestontour(gogogadgetacequilyaaumilieu[-1])
+        gogogadgetauchangementdesens(gogogadgetacequilyaaumilieu[-1])
+    gogogadgetauntrucaupif=[i for i in gogogadgetauxboutons[joueurs[0]]]
+    for i in gogogadgetauntrucaupif:
+        gogogadgetauxboutons[joueurs[0]][i][0].destroy()
+        del gogogadgetauxboutonscopie[i]
+        del gogogadgetauxboutons[joueurs[0]][i]
+    joueurs.append(joueurs.pop(0))
+    if len(gogogadgetauxjoueurs[joueurs[-1]])!=0:
+        showinfo("Suivant!",joueurs[0]+" c'est à vous de jouer")
+        if len(gogogadgetauxjoueurs[joueurs[-1]])==1:
+            showinfo("Attention",joueurs[-1]+" n'a plus qu'une carte")
+        jeu()
+
+def jeu():
+    """boucle principale de la partie"""
+    global gogogadgetauxboutons,gogogadgetauntrucaupif,unbouton,unecarte,lable,mute,pioche
+    mute=Button(fenetre,text="Mute",command=timeout)
+    mute.pack(side=RIGHT)
+    pioche=Button(fenetre,text="Piocher",command=call)
+    pioche.pack(side=LEFT)
+    if gogogadgetacequilyaaumilieu[-2]=='+4'or gogogadgetacequilyaaumilieu[-2]=='changement de couleur':
+        showinfo("Couleur","Vous devez jouer du "+gogogadgetacequilyaaumilieu[-1])
+        unecarte=PhotoImage(file=gogogadgetacequilyaaumilieu[-2]+'.png')
+        unbouton=Button(fenetre,image=unecarte,relief=FLAT)
+        unbouton.pack(side=TOP)
+    else:
+        unecarte=PhotoImage(file=gogogadgetacequilyaaumilieu[-1]+'.png')
+        unbouton=Button(fenetre,image=unecarte,relief=FLAT)
+        unbouton.pack(side=TOP)
+    lable=Label(fenetre,text="Tour de : "+joueurs[0]+" Ta main : ")
+    lable.pack()
+    gogogadgetalaffichagedetamain(gogogadgetauxjoueurs[joueurs[0]],joueurs[0])
+
+fenetre=Tk(className="gogogadgetouno")
+Frame1 = Frame(fenetre, borderwidth=2, relief=GROOVE)
+Frame1.pack()
+
+menubar = Menu(fenetre)
+
+menu1 = Menu(menubar, tearoff=0)
+menu1.add_command(label="Nouvelle partie", command=relance)
+menu1.add_separator()
+menu1.add_command(label="Quitter", command=callback)
+menubar.add_cascade(label="Fichier", menu=menu1)
+
+menu2 = Menu(menubar, tearoff=0)
+menu2.add_command(label="A propos", command=voicidelaide)
+menubar.add_cascade(label="Aide", menu=menu2)
+
+fenetre.config(menu=menubar)
+carte=PhotoImage(file='dos carte.png')
+Button(image=carte,relief=FLAT).pack()
+
+relancer=False
+gogogadgetauxjoueurs={}
+gogogadgetalapiocheremplie()
+gogogadgetatamain(gogogadgetacequilyaaumilieu)
+a=gogogadgetacequilyaaumilieu[-1].split()
+while a[0]=="+4" or a [0]=="changement" or a[0]=="passe" or a[0]=="+2":
+    gogogadgetacequilyaaumilieu.pop()
+    gogogadgetalapiocheremplie()
+    gogogadgetatamain(gogogadgetacequilyaaumilieu)
+    a=gogogadgetacequilyaaumilieu[-1].split()
+gogogadgetauxnombresdecartesquetudoispiocher=0
+
+Label(fenetre,text="gogogadgetaunombredejoueurs").pack()
+value = DoubleVar()
+scale = Scale(fenetre, variable=value,orient='horizontal', from_=2, to=10,resolution=1)
+scale.pack()
+Button(text="valider",command=demande_nom).pack(side=RIGHT)
+
+fenetre.mainloop()
+
